@@ -1,0 +1,15 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# virtualenv
+ncs/
+test-ncs/
+/docs/_build
+
+# Misc
+.idea/
+
+# Example
+example/
