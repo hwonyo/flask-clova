@@ -21,7 +21,7 @@ pip install flask_clova
 ```
 
 ## Basics
-```
+```python
 from flask import Flask
 from flask_clova import Clova, statement, question
 
