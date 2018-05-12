@@ -10,6 +10,7 @@ SDK of CEK (Clova Extension Kit) for Python <br>
 ## Table of Contents
 * [Install](#install)
 * [Basics](#basics)
+* [Test](#test)
 * [WorkToDo](#worktodo)
 
 
@@ -39,6 +40,13 @@ def play_game():
     speech = "안녕하세요"
     return statement(speech).add_speech("Hello", lang='en')
 ```
+
+## Test
+```
+>> pip install -r requirements-dev.txt
+>> python -m unittest discover test/
+```
+
 
 ## WorkToDO
 
