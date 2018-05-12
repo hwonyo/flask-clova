@@ -11,8 +11,8 @@ logging.getLogger('flask_clova').setLevel(logging.DEBUG)
 
 
 if __name__ == '__main__':
-    if 'ASK_VERIFY_REQUESTS' in os.environ:
-        verify = str(os.environ.get('ASK_VERIFY_REQUESTS', '')).lower()
+    if 'CLOVA_VERIFY_REQUESTS' in os.environ:
+        verify = str(os.environ.get('CLOVA_VERIFY_REQUESTS', '')).lower()
         if verify == 'false':
-            app.config['ASK_VERIFY_REQUESTS'] = False
+            app.config['CLOVA_VERIFY_REQUESTS'] = False
     app.run(debug=True)

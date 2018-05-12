@@ -28,7 +28,7 @@ def session_ended():
 
 
 if __name__ == '__main__':
-    if 'ASK_VERIFY_REQUESTS' in os.environ:
+    if 'CLOVA_VERIFY_REQUESTS' in os.environ:
         verify = str(os.environ.get('CLOVA_VERIFY_REQUESTS', '')).lower()
         if verify == 'false':
             app.config['ASK_VERIFY_REQUESTS'] = False
