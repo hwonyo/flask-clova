@@ -15,8 +15,6 @@ SDK of CEK (Clova Extension Kit) for Python <br>
 
 ## Install
 ```
-git clone https://github.com/HwangWonYo/flask-clova.git
-# or
 pip install flask_clova
 ```
 
