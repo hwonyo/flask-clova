@@ -37,8 +37,8 @@ def launch():
     return question('시작했습니다')
 
 @clova.intent('HelloIntent')
-def play_game(user_name):
-    speech = "안녕하세요 %s" % username
+def play_game():
+    speech = "안녕하세요"
     return statement(speech).add_speech("Hello", lang='en')
 ```
 
