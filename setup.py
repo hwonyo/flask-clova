@@ -7,7 +7,7 @@ dependency_links = [
 ]
 
 setup(
-    name='nta',
+    name='flask_clova',
     version=flask_clova.__version__,
     url='https://github.com/HwangWonYo/flask-clova.git',
     license='MIT License',
