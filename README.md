@@ -16,6 +16,10 @@ SDK of CEK (Clova Extension Kit) for Python <br>
 
 ## Install
 ```
+# setup requires will automatically installed in later version
+pip install PyYAML
+pip install Flask
+
 pip install flask_clova
 ```
 
