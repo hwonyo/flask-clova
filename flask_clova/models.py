@@ -62,14 +62,14 @@ class _Response(object):
         return self
 
     def render_response(self):
-        sessionAttributes = session.sessionAttributes
-        if sessionAttributes is None:
-            sessionAttributes = {}
+        attributes = session.attributes
+        if attributes is None:
+            attributes = {}
 
         response_wrapper = {
             'version': '0.1.0',
             'response': self._response,
-            'sessionAttributes': sessionAttributes
+            'attributes': attributes
         }
         dbgdump(response_wrapper)
 
