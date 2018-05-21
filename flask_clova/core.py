@@ -334,7 +334,7 @@ class Clova(object):
             else:
                 logger.info("SessionEndedRequest Handler is not defined.")
                 result = "{}", 200
-        elif request_type == 'IntentRequest' and self._intent_view_funcs:
+        elif request_type == 'IntentRequest' and (self._intent_view_funcs or self._default_intent_view_func):
             result = self._map_intent_to_view_func(self.request.intent)()
 
         if result is not None:
