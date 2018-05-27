@@ -318,3 +318,24 @@ class SmokeTestUsingSamples(unittest.TestCase):
         response = self._post(route='/clova', data=session_end)
         print(response.headers)
         self.assertIsNone(self._get_response(response))
+
+    def test_magicball(self):
+        self._launch('magicball/handler.py')
+
+        response = self._post(data=launch)
+        self.assertEqual(
+            {
+                'card': {},
+                'directives': [],
+                'outputSpeech': {
+                    'type': 'SimpleSpeech',
+                    'values': {
+                        'type': 'PlainText',
+                        'lang': 'ko',
+                        'value': "안녕하세요? 마법구슬이에요. 무엇이든 저에게 물어보세요."
+                    }
+                },
+                'shouldEndSession': False,
+            },
+            self._get_response(response)
+        )
