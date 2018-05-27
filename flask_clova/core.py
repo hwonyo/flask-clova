@@ -90,7 +90,6 @@ class Clova(object):
         elif blueprint is not None:
             self.init_blueprint(blueprint, path)
 
-
     def init_app(self, app, path='templates.yaml'):
         """Initializes Clova app by setting configuration variables, loading templates, and maps Clova route to a flask view.
 
@@ -207,7 +206,7 @@ class Clova(object):
 
         return f
 
-    def intent(self, intent_name, mapping={}, convert={}, default={}):
+    def intent(self, intent_name, mapping=None, convert=None, default=None):
         """Decorator routes an CEK IntentRequest and provides the slot parameters to the wrapped function.
 
         Functions decorated as an intent are registered as the view function for the Intent's URL,
@@ -231,6 +230,13 @@ class Clova(object):
                 returns no corresponding slot, or a slot with an empty value
                 default: {}
         """
+        if mapping is None:
+            mapping = dict()
+        if convert is None:
+            convert = dict()
+        if default is None:
+            default = dict()
+
         def decorator(f):
             self._intent_view_funcs[intent_name] = f
             self._intent_mappings[intent_name] = mapping
@@ -297,12 +303,11 @@ class Clova(object):
 
         if verify:
             # verify application id
-            application_id = cek_request_payload['context']['System']['application']['applicationId']
             if self.clova_application_id is not None:
+                application_id = cek_request_payload['context']['System']['application']['applicationId']
                 verifier.verify_application_id(application_id, self.clova_application_id)
 
         return cek_request_payload
-
 
     def _flask_view_func(self, *args, **kwargs):
         clova_payload = self._cek_request(verify=self.clova_verify_requests)
