@@ -6,21 +6,21 @@ from flask_clova import Clova, request, session, question, statement
 
 
 app = Flask(__name__)
-ask = Clova(app, "/")
+clova = Clova(app, "/")
 logging.getLogger('flask_clova').setLevel(logging.DEBUG)
 
 
 COLOR_KEY = "COLOR"
 
 
-@ask.launch
+@clova.launch
 def launch():
     question_text = render_template('welcome')
     reprompt_text = render_template('welcome_reprompt')
     return question(question_text).reprompt(reprompt_text)
 
 
-@ask.intent('MyColorIsIntent', mapping={'color': 'Color'})
+@clova.intent('MyColorIsIntent', mapping={'color': 'Color'})
 def my_color_is(color):
     if color is not None:
         session.attributes[COLOR_KEY] = color
@@ -32,7 +32,7 @@ def my_color_is(color):
     return question(question_text).reprompt(reprompt_text)
 
 
-@ask.intent('WhatsMyColorIntent')
+@clova.intent('WhatsMyColorIntent')
 def whats_my_color():
     color = session.attributes.get(COLOR_KEY)
     if color is not None:
@@ -43,7 +43,7 @@ def whats_my_color():
         return question(question_text).reprompt(question_text)
 
 
-@ask.session_ended
+@clova.session_ended
 def session_ended():
     return "{}", 200
 

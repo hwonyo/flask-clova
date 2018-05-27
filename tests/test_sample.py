@@ -339,3 +339,25 @@ class SmokeTestUsingSamples(unittest.TestCase):
             },
             self._get_response(response)
         )
+
+
+    def test_dice(self):
+        self._launch('dice/handler.py')
+
+        response = self._post(data=launch)
+        self.assertEqual(
+            {
+                'card': {},
+                'directives': [],
+                'outputSpeech': {
+                    'type': 'SimpleSpeech',
+                    'values': {
+                        'type': 'PlainText',
+                        'lang': 'ko',
+                        'value': "몇개의 주사위를 던질까요?"
+                    }
+                },
+                'shouldEndSession': False,
+            },
+            self._get_response(response)
+        )

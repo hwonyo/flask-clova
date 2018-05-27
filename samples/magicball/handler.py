@@ -10,24 +10,24 @@ from flask import Flask
 from flask_clova import Clova, question, statement
 
 app = Flask(__name__)
-ask = Clova(app, "/")
+clova = Clova(app, "/")
 logging.getLogger('flask_clova').setLevel(logging.DEBUG)
 
 
-@ask.launch
+@clova.launch
 def launch():
     speech_text = "안녕하세요? 마법구슬이에요. 무엇이든 저에게 물어보세요."
     return question(speech_text)
 
 
-@ask.default_intent
+@clova.default_intent
 def default_intent():
     magic_sound = "https://ssl.pstatic.net/static/clova/service/native_extensions/magicball/magic_ball_sound.mp3"
     speech = "마법 구슬이 " + get_answer() + " 라고 말합니다."
     return statement(magic_sound ,url=True).add_speech(speech)
 
 
-@ask.session_ended
+@clova.session_ended
 def session_ended():
     return "{}", 200
 
