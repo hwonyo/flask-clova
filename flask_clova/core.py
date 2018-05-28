@@ -162,7 +162,7 @@ class Clova(object):
 
     @property
     def clova_test_mode(self):
-        return current_app.config.get('COLVA_TEST_MODE', False)
+        return current_app.config.get('CLOVA_TEST_MODE', False)
 
     def on_session_started(self, f):
         """Decorator to call wrapped function upon starting a session.
