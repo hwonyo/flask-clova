@@ -110,13 +110,6 @@ class Clova(object):
             It is useful for mocking JSON requests in automated tests.
             Default: True
 
-        `COLVA_TEST_MODE`:
-
-            Enables or disables CEK test mode, which fills missing field during test
-            specifically sessionAttributes. This setting should not be abled in production.
-            It is usefule when test with CEK console.
-            Default: False
-
         `CLOVA_PRETTY_DEBUG_LOGS`:
 
             Add tabs and linebreaks to the CEK request and response printed to the debug log.
@@ -159,10 +152,6 @@ class Clova(object):
     @property
     def clova_verify_requests(self):
         return current_app.config.get('CLOVA_VERIFY_REQUESTS', True)
-
-    @property
-    def clova_test_mode(self):
-        return current_app.config.get('CLOVA_TEST_MODE', False)
 
     def on_session_started(self, f):
         """Decorator to call wrapped function upon starting a session.
@@ -308,7 +297,7 @@ class Clova(object):
             return self.context.get('System', {}).get('user', {}).get('userId')
         return None
 
-    def _cek_request(self, verify=True, test_mode=False):
+    def _cek_request(self, verify=True):
         raw_body = flask_request.data
         cek_request_payload = json.loads(raw_body)
 
@@ -318,14 +307,10 @@ class Clova(object):
                 application_id = cek_request_payload['context']['System']['application']['applicationId']
                 verifier.verify_application_id(application_id, self.clova_application_id)
 
-        if test_mode:
-            if session.sessionAttributes is None:
-                session.sessionAttributes = {}
-
         return cek_request_payload
 
     def _flask_view_func(self, *args, **kwargs):
-        clova_payload = self._cek_request(verify=self.clova_verify_requests, test_mode=self.clova_test_mode)
+        clova_payload = self._cek_request(verify=self.clova_verify_requests)
         dbgdump(clova_payload)
         request_body = models._Field(clova_payload)
 
@@ -363,7 +348,7 @@ class Clova(object):
             response = make_response(result)
             response.mimetype = 'application/json;charset=utf-8'
             return response
-        logger.warn(request_type + " handler is not defined.")
+        logger.warning(request_type + " handler is not defined.")
         return "", 400
 
     def _map_intent_to_view_func(self, intent):
