@@ -307,6 +307,13 @@ class Clova(object):
                 application_id = cek_request_payload['context']['System']['application']['applicationId']
                 verifier.verify_application_id(application_id, self.clova_application_id)
 
+        try:
+            cek_request_payload['session']
+        except KeyError:
+            logger.debug("Session field is missing.\n"
+                         "This message should not be appeared in produciton.")
+            cek_request_payload['session'] = {}
+
         return cek_request_payload
 
     def _flask_view_func(self, *args, **kwargs):
