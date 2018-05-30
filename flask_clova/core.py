@@ -327,7 +327,7 @@ class Clova(object):
         self.session = getattr(request_body, 'session', models._Field())
 
         if not self.session.sessionAttributes:
-            self.session.attributes = models._Field()
+            self.session.sessionAttributes = models._Field()
 
         try:
             if self.session.new and self._on_session_started_callback is not None:
