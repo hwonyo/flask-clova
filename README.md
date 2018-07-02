@@ -31,7 +31,7 @@ from flask_clova import Clova, statement, question
 app = Flask(__name__)
 # must set CLOVA_VERIFY_REQUESTS False
 # while testing wihtout application_id
-# app.confing['CLOVA_VERIFY_REQUESTS'] = False
+# app.config['CLOVA_VERIFY_REQUESTS'] = False
 
 clova = Clova(app, '/user_defined')
 
