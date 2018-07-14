@@ -146,6 +146,7 @@ project_root = os.path.abspath(os.path.join(flask_clova.__file__, '../..'))
 @unittest.skipIf(six.PY2, "Not yet supported on Python 2.x")
 class SmokeTestUsingSamples(unittest.TestCase):
     """ Try launching each sample and sending some requests to them. """
+    maxDiff = None
 
     def setUp(self):
         self.python = sys.executable
@@ -358,6 +359,42 @@ class SmokeTestUsingSamples(unittest.TestCase):
                     }
                 },
                 'shouldEndSession': False,
+            },
+            self._get_response(response)
+        )
+
+    def test_brief(self):
+        self._launch('brief/brief_test.py')
+
+        response = self._post(data=intent_req)
+        self.assertEqual(
+            {
+                "card": {},
+                "directives": [],
+                "outputSpeech": {
+                    "type": "SpeechSet",
+                    "brief": {
+                        "type": "PlainText",
+                        "lang": "en",
+                        "value": "This is test for brief"
+                    },
+                    "verbose": {
+                        "type": "SpeechList",
+                        "values": [
+                            {
+                                "type": "PlainText",
+                                "lang": "en",
+                                "value": "TestValue"
+                            },
+                            {
+                                "type": "PlainText",
+                                "lang": "ko",
+                                "value": "두번째 테스트"
+                            }
+                        ]
+                    }
+                },
+                "shouldEndSession": False,
             },
             self._get_response(response)
         )
