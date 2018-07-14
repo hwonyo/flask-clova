@@ -20,4 +20,5 @@ from .core import (
 from .models import (
     question,
     statement,
+    brief,
 )

@@ -112,8 +112,45 @@ class question(_Response):
 
 
 class brief(_Response):
-    #To Do
-    pass
+
+    def __init__(self, speech, url=False, lang='ko'):
+        """
+        Overwrite __init__ method from _Response class
+        because brief use field name 'brief' instead of 'value'.
+        """
+        self._response = {
+            'card': {},
+            'directives': [],
+            'outputSpeech':
+                {
+                    'type': 'SpeechSet',
+                    'brief': _output_speech(speech, url=url, lang=lang)
+                }
+        }
+
+        self._response['shouldEndSession'] = False
+
+    def _add(self, value):
+        """
+        Overwrite _add method from _Response class
+        beacuse brief handles attributes in different way.
+        """
+        if 'verbose' not in self._response['outputSpeech']:
+            # For SimpleSpeech
+            self._response['outputSpeech']['verbose'] = dict()
+            self._response['outputSpeech']['verbose']['type'] = 'SimpleSpeech'
+            self._response['outputSpeech']['verbose']['values'] = value
+        else:
+            # For SpeechList
+            self._response['outputSpeech']['verbose']['type'] = 'SpeechList'
+            values = self._response['outputSpeech']['verbose']['values']
+            if not isinstance(values, list):
+                values = [values]
+
+            values.append(value)
+            self._response['outputSpeech']['verbose']['values'] = values
+        return self
+
 
 
 def _copyattr(src, dest, attr, convert=None):
