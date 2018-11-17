@@ -3,7 +3,7 @@ import six
 import mock
 
 from flask import Flask
-from flask_clova import Clova, session, request
+from flask_clova import Clova, session, request, question
 
 @unittest.skipIf(six.PY2, "Not yet supported on Python 2.x")
 class SmokeTestUsingSamples(unittest.TestCase):
@@ -167,5 +167,81 @@ class SmokeTestUsingSamples(unittest.TestCase):
 
         self.assertEqual(counter.call_count, 1)
 
+    def test_follow_up_intent(self):
+        @self.clova.intent(
+            'parent_intent'
+        )
+        def parent_intent(p_value):
+            return question("go to follow up intent")
+
+        child_mock = mock.MagicMock()
+        @self.clova.intent(
+            'child_intent',
+            follow_up=['parent_intent']
+        )
+        def child_intent(p_value, c_value):
+            child_mock()
+            self.assertEqual(p_value, "from parent")
+            self.assertEqual(c_value, "from child")
+            return "ok"
+
+        orphan_mock = mock.MagicMock()
+        @self.clova.intent(
+            'child_intent',
+            follow_up=['other_parent']
+        )
+        def orphan_intent():
+            orphan_mock()
+            return "ok"
+
+        req_p = {
+            "version": "0.1.0",
+            "session": {},
+            "context": {},
+            "request": {
+                "type": "IntentRequest",
+                "intent": {
+                    "name": "parent_intent",
+                    "slots": {
+                        'p_value': {
+                            'name': 'p_value',
+                            'value': 'from parent'
+                        }
+                    }
+                }
+            }
+        }
+
+        req_c = {
+            "version": "0.1.0",
+            "session": {},
+            "context": {},
+            "request": {
+                "type": "IntentRequest",
+                "intent": {
+                    "name": "child_intent",
+                    "slots": {
+                        'c_value': {
+                            'name': 'c_value',
+                            'value': 'from child'
+                        }
+                    }
+                }
+            }
+        }
+
+        with self.app.test_client() as client:
+            rv = client.post('/', json=req_p)
+            self.assertEqual('200 OK', rv.status)
+
+            req_c['session']['sessionAttributes'] = rv.json.get('sessionAttributes')
+            rv = client.post('/', json=req_c)
+            self.assertEqual('200 OK', rv.status)
+
+        self.assertEqual(child_mock.call_count, 1)
+        self.assertEqual(orphan_mock.call_count, 0)
+
+
+
 if __name__ == "__main__":
-    unittest.run()
+    unittest.main()
