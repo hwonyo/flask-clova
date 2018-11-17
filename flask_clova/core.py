@@ -206,7 +206,7 @@ class Clova(object):
 
         return f
 
-    def intent(self, intent_name, mapping=None, convert=None, default=None):
+    def intent(self, intent_name, mapping=None, convert=None, default=None, follow_up=None):
         """Decorator routes an CEK IntentRequest and provides the slot parameters to the wrapped function.
 
         Functions decorated as an intent are registered as the view function for the Intent's URL,
@@ -229,6 +229,8 @@ class Clova(object):
             default {dict} --  Provides default values for Intent slots if CEK reuqest
                 returns no corresponding slot, or a slot with an empty value
                 default: {}
+
+            follow_up {list} -- List parent nodes to follow up
         """
         if mapping is None:
             mapping = dict()
@@ -236,12 +238,20 @@ class Clova(object):
             convert = dict()
         if default is None:
             default = dict()
+        if follow_up is None:
+            follow_up = ["__private_default"]
 
         def decorator(f):
-            self._intent_view_funcs[intent_name] = f
-            self._intent_mappings[intent_name] = mapping
-            self._intent_converts[intent_name] = convert
-            self._intent_defaults[intent_name] = default
+            if intent_name not in self._intent_view_funcs:
+                self._intent_view_funcs[intent_name] = dict()
+                self._intent_mappings[intent_name] = dict()
+                self._intent_converts[intent_name] = dict()
+                self._intent_defaults[intent_name] = dict()
+            for fintent in follow_up:
+                self._intent_view_funcs[intent_name][fintent] = f
+                self._intent_mappings[intent_name][fintent] =  mapping
+                self._intent_converts[intent_name][fintent] = convert
+                self._intent_defaults[intent_name][fintent] = default
 
             return f
         return decorator
@@ -350,6 +360,7 @@ class Clova(object):
             result = self._map_intent_to_view_func(self.request.intent)()
 
         if result is not None:
+            self._private_contexts_handler(request.intent)
             if isinstance(result, models._Response):
                 result = result.render_response()
             response = make_response(result)
@@ -358,30 +369,48 @@ class Clova(object):
         logger.warning(request_type + " handler is not defined.")
         return "", 400
 
+    def _private_contexts_handler(self, context):
+        if session.sessionAttributes is None or '__private_contexts' not in session.sessionAttributes:
+            session.sessionAttributes['__private_contexts'] = list()
+        session.sessionAttributes['__private_contexts'].append(context)
+
     def _map_intent_to_view_func(self, intent):
         """Provides appropiate parameters to the intent functions."""
+        arg_values = []
+
         if intent.name in self._intent_view_funcs:
-            view_func = self._intent_view_funcs[intent.name]
+            contexts = self.session.sessionAttributes.get('__private_contexts', {})
+            follow_up_context = {'name': '__private_default'}
+            current_intents = self._intent_view_funcs[intent.name]
+            # consider parent intent
+            for context in contexts:
+                parent_intent = context.get('name')
+                if parent_intent in current_intents:
+                    follow_up_context = context
+                    break
+            view_func = current_intents[follow_up_context.get('name')]
+
+            argspec = inspect.getfullargspec(view_func)
+            arg_names = argspec.args
+            arg_values = self._map_params_to_view_args(intent.name, arg_names, follow_up_context)
+
         elif self._default_intent_view_func is not None:
             view_func = self._default_intent_view_func
         else:
             raise NotImplementedError('Intent "{}" not found and no default intent specified.'.format(intent.name))
 
-        argspec = inspect.getfullargspec(view_func)
-        arg_names = argspec.args
-        arg_values = self._map_params_to_view_args(intent.name, arg_names)
-
         return partial(view_func, *arg_values)
 
-    def _map_params_to_view_args(self, view_name, arg_names):
+    def _map_params_to_view_args(self, view_name, arg_names, follow_up_context):
         """
         find and invoke appropriate function
         """
 
         arg_values = []
-        convert = self._intent_converts.get(view_name)
-        default = self._intent_defaults.get(view_name)
-        mapping = self._intent_mappings.get(view_name)
+        fname = follow_up_context.get('name')
+        convert = self._intent_converts[view_name][fname]
+        default = self._intent_defaults[view_name][fname]
+        mapping = self._intent_mappings[view_name][fname]
 
         convert_errors = {}
 
@@ -393,9 +422,15 @@ class Clova(object):
                     slot_object = getattr(intent.slots, slot_key)
                     request_data[slot_object.name] = getattr(slot_object, 'value', None)
 
-        else:
-            for param_name in self.request:
-                request_data[param_name] = getattr(self.request, param_name, None)
+        # else:
+        #     for param_name in self.request:
+        #         request_data[param_name] = getattr(self.request, param_name, None)
+
+        follow_up_slots = follow_up_context.get('slots')
+        if follow_up_slots is not None:
+            for slot_key in follow_up_slots.keys():
+                slot_object = follow_up_slots.get(slot_key)
+                request_data[slot_object.get('name')] = slot_object.get('value')
 
         for arg_name in arg_names:
             param_or_slot = mapping.get(arg_name, arg_name)
