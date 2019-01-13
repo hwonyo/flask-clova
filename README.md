@@ -26,7 +26,7 @@ pip install flask_clova
 ## Basics
 ```python
 from flask import Flask
-from flask_clova import Clova, statement, question
+from flask_clova import Clova, statement, question, say
 
 app = Flask(__name__)
 # must set CLOVA_VERIFY_REQUESTS False
@@ -37,12 +37,12 @@ clova = Clova(app, '/user_defined')
 
 @clova.launch
 def launch():
-    return question('시작했습니다')
+    return question(say.Korean('시작했습니다'))
 
 @clova.intent('HelloIntent')
 def play_game():
     speech = "안녕하세요"
-    return statement(speech).add_speech("Hello", lang='en')
+    return statement(say.Korean(speech)).add_speech(say.English("Hello"))
 
 if __name__ == "__main__":
     app.config['CLOVA_VERIFY_REQUESTS'] = False
