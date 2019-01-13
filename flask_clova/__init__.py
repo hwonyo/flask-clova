@@ -21,3 +21,7 @@ from .models import (
     question,
     statement,
 )
+
+from .speech import (
+    say,
+)

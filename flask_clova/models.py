@@ -37,19 +37,19 @@ class _Field(dict):
 
 class _Response(object):
 
-    def __init__(self, speech, url=False, lang='ko'):
+    def __init__(self, speech):
         self._response = {
             'card': {},
             'directives': [],
             'outputSpeech':
                 {
                     'type': 'SimpleSpeech',
-                    'values': _output_speech(speech, url=url, lang=lang)
+                    'values': _output_speech(speech)
                 }
         }
 
-    def add_speech(self, speech, url=False, lang='ko'):
-        return self._add(_output_speech(speech, url, lang))
+    def add_speech(self, speech):
+        return self._add(_output_speech(speech))
 
     def _add(self, value):
         self._response['outputSpeech']['type'] = 'SpeechList'
@@ -78,27 +78,27 @@ class _Response(object):
 
 class statement(_Response):
 
-    def __init__(self, speech, url=False, lang='ko'):
-        super(statement, self).__init__(speech, url=url, lang=lang)
+    def __init__(self, speech):
+        super(statement, self).__init__(speech)
 
         self._response['shouldEndSession'] = True
 
 
 class question(_Response):
 
-    def __init__(self, speech, url=False, lang='ko'):
-        super(question, self).__init__(speech, url, lang)
+    def __init__(self, speech):
+        super(question, self).__init__(speech)
 
         self._response['shouldEndSession'] = False
 
-    def reprompt(self, reprompt, url=False, lang='ko'):
+    def reprompt(self, reprompt):
         """
         Only support repromt type SimpleSpeech now
         """
         reprompt = {
             'outputSpeech': {
                 'type': 'SimpleSpeech',
-                'values': _output_speech(reprompt, lang=lang, url=url)
+                'values': _output_speech(reprompt)
             }
         }
         self._response['reprompt'] = reprompt
@@ -124,9 +124,5 @@ def _copyattr(src, dest, attr, convert=None):
         setattr(dest, attr, value)
 
 
-def _output_speech(speech,  url=False, lang='ko'):
-    return {
-        'type': 'PlainText' if not url else 'URL',
-        'lang': lang if not url else '',
-        'value': speech
-    }
+def _output_speech(speech):
+    return speech.render_template()
