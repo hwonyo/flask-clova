@@ -7,7 +7,7 @@ import logging
 import os
 
 from flask import Flask
-from flask_clova import Clova, question, statement
+from flask_clova import Clova, question, statement, say
 
 app = Flask(__name__)
 clova = Clova(app, "/")
@@ -17,14 +17,15 @@ logging.getLogger('flask_clova').setLevel(logging.DEBUG)
 @clova.launch
 def launch():
     speech_text = "안녕하세요? 마법구슬이에요. 무엇이든 저에게 물어보세요."
-    return question(speech_text)
+    return question(say.Korean(speech_text))
 
 
 @clova.default_intent
 def default_intent():
     magic_sound = "https://ssl.pstatic.net/static/clova/service/native_extensions/magicball/magic_ball_sound.mp3"
     speech = "마법 구슬이 " + get_answer() + " 라고 말합니다."
-    return statement(magic_sound ,url=True).add_speech(speech)
+    return statement(say.Link(magic_sound))\
+        .add_speech(say.Korean(speech))
 
 
 @clova.session_ended

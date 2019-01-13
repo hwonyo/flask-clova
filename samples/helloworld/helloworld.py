@@ -2,7 +2,7 @@ import logging
 import os
 
 from flask import Flask
-from flask_clova import Clova, question, statement
+from flask_clova import Clova, question, statement, say
 
 app = Flask(__name__)
 clova = Clova(app, "/")
@@ -12,14 +12,14 @@ logging.getLogger('flask_clova').setLevel(logging.DEBUG)
 @clova.launch
 def launch():
     speech_text = 'Welcome to the CEK World'
-    return question(speech_text, lang='en').reprompt('Re ' + speech_text, lang='en')
+    return question(say.English(speech_text)).reprompt(say.English('Re ' + speech_text))
 
 
 @clova.intent('TestIntent', mapping={'test_slot': 'TestSlot'})
 def hello_world(test_slot):
     speech_text = 'Hello world'
-    return statement(speech_text, lang='en')\
-                .add_speech(test_slot, lang='en')
+    return statement(say.English(speech_text))\
+                .add_speech(say.English(test_slot))
 
 
 @clova.session_ended

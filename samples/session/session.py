@@ -2,7 +2,7 @@ import logging
 import os
 
 from flask import Flask, json, render_template
-from flask_clova import Clova, request, session, question, statement
+from flask_clova import Clova, request, session, question, statement, say
 
 
 app = Flask(__name__)
@@ -17,7 +17,8 @@ COLOR_KEY = "COLOR"
 def launch():
     question_text = render_template('welcome')
     reprompt_text = render_template('welcome_reprompt')
-    return question(question_text).reprompt(reprompt_text)
+    return question(say.Korean(question_text))\
+        .reprompt(say.Korean(reprompt_text))
 
 
 @clova.intent('MyColorIsIntent', mapping={'color': 'Color'})
@@ -29,7 +30,8 @@ def my_color_is(color):
     else:
         question_text = render_template('unknown_color')
         reprompt_text = render_template('unknown_color_reprompt')
-    return question(question_text).reprompt(reprompt_text)
+    return question(say.Korean(question_text))\
+        .reprompt(say.Korea(reprompt_text))
 
 
 @clova.intent('WhatsMyColorIntent')
@@ -37,10 +39,10 @@ def whats_my_color():
     color = session.attributes.get(COLOR_KEY)
     if color is not None:
         statement_text = render_template('known_color_bye', color=color)
-        return statement(statement_text)
+        return statement(say.Korean(statement_text))
     else:
         question_text = render_template('unknown_color_reprompt')
-        return question(question_text).reprompt(question_text)
+        return question(say.Korean(question_text)).reprompt(say.Korean(question_text))
 
 
 @clova.session_ended

@@ -7,7 +7,7 @@ import logging
 import os
 
 from flask import Flask
-from flask_clova import Clova, question, statement, session
+from flask_clova import Clova, question, statement, session, say
 
 app = Flask(__name__)
 clova = Clova(app, "/")
@@ -19,7 +19,7 @@ def launch():
     speech_text = "몇개의 주사위를 던질까요?"
     session.sessionAttributes['intent'] = 'ThrowDiceIntent'
 
-    return question(speech_text)
+    return question(say.Korean(speech_text))
 
 
 @clova.intent('ThrowDiceIntent',
@@ -31,19 +31,19 @@ def throw_handler(dice_cnt):
     dice_sound = os.path.join(os.getcwd(), "rolling_dice_sound.mp3")
     result_text = get_answer(dice_cnt)
 
-    return statement(speech)\
-        .add_speech(dice_sound, url=True)\
-        .add_speech(result_text)
+    return statement(say.Korean(speech))\
+        .add_speech(say.Link(dice_sound))\
+        .add_speech(say.Korean(result_text))
 
 
 @clova.intent('Clova.GuideIntent')
 def guide_intent():
-    return question("주사위 한 개 던져줘, 라고 시도해보세요.")
+    return question(say.Korean("주사위 한 개 던져줘, 라고 시도해보세요."))
 
 
 @clova.session_ended
 def session_ended():
-    return statement("주사위 놀이 익스텐션을 종료합니다.")
+    return statement(say.Korean("주사위 놀이 익스텐션을 종료합니다."))
 
 
 def get_answer(dice_cnt):
