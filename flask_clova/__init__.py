@@ -25,3 +25,7 @@ from .models import (
 from .speech import (
     say,
 )
+
+from .directives import (
+    directive,
+)

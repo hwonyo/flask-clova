@@ -2,7 +2,7 @@ import logging
 import os
 
 from flask import Flask
-from flask_clova import Clova, question, statement, say
+from flask_clova import Clova, question, statement, say, directive
 
 app = Flask(__name__)
 clova = Clova(app, "/")
@@ -19,7 +19,7 @@ def launch():
 def hello_world(test_slot):
     speech_text = 'Hello world'
     return statement(say.English(speech_text))\
-                .add_speech(say.English(test_slot))
+                .add_speech(say.English(test_slot)).add_directive(directive.open_mike())
 
 
 @clova.session_ended

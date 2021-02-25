@@ -14,131 +14,130 @@ from requests import post
 import flask_clova
 
 launch = {
-  "version": "0.1.0",
-  "session": {
-    "new": True,
-    "sessionAttributes": {},
-    "sessionId": "a29cfead-c5ba-474d-8745-6c1a6625f0c5",
-    "user": {
-      "userId": "V0qe",
-      "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
-    }
-  },
-  "context": {
-    "System": {
-      "application": {
-        "applicationId": "com.yourdomain.extension.fakebot"
-      },
-      "user": {
-        "userId": "V0qe",
-        "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
-      },
-      "device": {
-        "deviceId": "096e6b27-1717-33e9-b0a7-510a48658a9b",
-        "display": {
-          "size": "l100",
-          "orientation": "landscape",
-          "dpi": 96,
-          "contentLayer": {
-            "width": 640,
-            "height": 360
-          }
+    "version": "0.1.0",
+    "session": {
+        "new": True,
+        "sessionAttributes": {},
+        "sessionId": "a29cfead-c5ba-474d-8745-6c1a6625f0c5",
+        "user": {
+            "userId": "V0qe",
+            "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
         }
-      }
+    },
+    "context": {
+        "System": {
+            "application": {
+                "applicationId": "com.yourdomain.extension.fakebot"
+            },
+            "user": {
+                "userId": "V0qe",
+                "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
+            },
+            "device": {
+                "deviceId": "096e6b27-1717-33e9-b0a7-510a48658a9b",
+                "display": {
+                    "size": "l100",
+                    "orientation": "landscape",
+                    "dpi": 96,
+                    "contentLayer": {
+                        "width": 640,
+                        "height": 360
+                    }
+                }
+            }
+        }
+    },
+    "request": {
+        "type": "LaunchRequest"
     }
-  },
-  "request": {
-    "type": "LaunchRequest"
-  }
 }
 
 intent_req = {
-  "version": "0.1.0",
-  "session": {
-    "new": False,
-    "sessionAttributes": {},
-    "sessionId": "a29cfead-c5ba-474d-8745-6c1a6625f0c5",
-    "user": {
-      "userId": "V0qe",
-      "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
-    }
-  },
-  "context": {
-    "System": {
-      "application": {
-        "applicationId": "com.yourdomain.extension.pizzabot"
-      },
-      "user": {
-        "userId": "V0qe",
-        "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
-      },
-      "device": {
-        "deviceId": "096e6b27-1717-33e9-b0a7-510a48658a9b",
-        "display": {
-          "size": "l100",
-          "orientation": "landscape",
-          "dpi": 96,
-          "contentLayer": {
-            "width": 640,
-            "height": 360
-          }
+    "version": "0.1.0",
+    "session": {
+        "new": False,
+        "sessionAttributes": {},
+        "sessionId": "a29cfead-c5ba-474d-8745-6c1a6625f0c5",
+        "user": {
+            "userId": "V0qe",
+            "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
         }
-      }
-    }
-  },
-  "request": {
-    "type": "IntentRequest",
-    "intent": {
-      "name": "TestIntent",
-      "slots": {
-        "TestSlotType": {
-          "name": "TestSlot",
-          "value": "TestValue"
+    },
+    "context": {
+        "System": {
+            "application": {
+                "applicationId": "com.yourdomain.extension.pizzabot"
+            },
+            "user": {
+                "userId": "V0qe",
+                "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
+            },
+            "device": {
+                "deviceId": "096e6b27-1717-33e9-b0a7-510a48658a9b",
+                "display": {
+                    "size": "l100",
+                    "orientation": "landscape",
+                    "dpi": 96,
+                    "contentLayer": {
+                        "width": 640,
+                        "height": 360
+                    }
+                }
+            }
         }
-      }
+    },
+    "request": {
+        "type": "IntentRequest",
+        "intent": {
+            "name": "TestIntent",
+            "slots": {
+                "TestSlotType": {
+                    "name": "TestSlot",
+                    "value": "TestValue"
+                }
+            }
+        }
     }
-  }
 }
 
 session_end = {
-  "version": "0.1.0",
-  "session": {
-    "new": False,
-    "sessionAttributes": {},
-    "sessionId": "a29cfead-c5ba-474d-8745-6c1a6625f0c5",
-    "user": {
-      "userId": "V0qe",
-      "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
-    }
-  },
-  "context": {
-    "System": {
-      "application": {
-        "applicationId": "com.yourdomain.extension.pizzabot"
-      },
-      "user": {
-        "userId": "V0qe",
-        "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
-      },
-      "device": {
-        "deviceId": "096e6b27-1717-33e9-b0a7-510a48658a9b",
-        "display": {
-          "size": "l100",
-          "orientation": "landscape",
-          "dpi": 96,
-          "contentLayer": {
-            "width": 640,
-            "height": 360
-          }
+    "version": "0.1.0",
+    "session": {
+        "new": False,
+        "sessionAttributes": {},
+        "sessionId": "a29cfead-c5ba-474d-8745-6c1a6625f0c5",
+        "user": {
+            "userId": "V0qe",
+            "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
         }
-      }
+    },
+    "context": {
+        "System": {
+            "application": {
+                "applicationId": "com.yourdomain.extension.pizzabot"
+            },
+            "user": {
+                "userId": "V0qe",
+                "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
+            },
+            "device": {
+                "deviceId": "096e6b27-1717-33e9-b0a7-510a48658a9b",
+                "display": {
+                    "size": "l100",
+                    "orientation": "landscape",
+                    "dpi": 96,
+                    "contentLayer": {
+                        "width": 640,
+                        "height": 360
+                    }
+                }
+            }
+        }
+    },
+    "request": {
+        "type": "SessionEndedRequest"
     }
-  },
-  "request": {
-    "type": "SessionEndedRequest"
-  }
 }
-
 
 project_root = os.path.abspath(os.path.join(flask_clova.__file__, '../..'))
 
@@ -159,7 +158,7 @@ class SmokeTestUsingSamples(unittest.TestCase):
         time.sleep(1)
         self.assertIsNone(process.poll(),
                           msg='Poll should work,'
-                          'otherwise we failed to launch')
+                              'otherwise we failed to launch')
         self.process = process
 
     def _post(self, route='/', data={}):
@@ -172,15 +171,15 @@ class SmokeTestUsingSamples(unittest.TestCase):
     @staticmethod
     def _get_text(http_response):
         data = http_response.json()
-        return data.get('response', {})\
-                   .get('outputSpeech', {})
+        return data.get('response', {}) \
+            .get('outputSpeech', {})
 
     @staticmethod
     def _get_reprompt(http_response):
         data = http_response.json()
-        return data.get('response', {})\
-                   .get('reprompt', {})\
-                   .get('outputSpeech', {})
+        return data.get('response', {}) \
+            .get('reprompt', {}) \
+            .get('outputSpeech', {})
 
     @staticmethod
     def _get_response(http_response):
@@ -209,7 +208,7 @@ class SmokeTestUsingSamples(unittest.TestCase):
             {
                 'card': {},
                 'directives': [],
-                'outputSpeech':{
+                'outputSpeech': {
                     'type': 'SimpleSpeech',
                     'values': {
                         'type': 'PlainText',
@@ -232,12 +231,22 @@ class SmokeTestUsingSamples(unittest.TestCase):
             self._get_response(response)
         )
 
-        #check intent
+        # check intent
         response = self._post(data=intent_req)
         self.assertEqual(
             {
                 'card': {},
-                'directives': [],
+                'directives': [
+                    {
+                        "header": {
+                            "name": "KeepConversation",
+                            "namespace": "Clova"
+                        },
+                        "payload": {
+                            "explicit": True
+                        }
+                    }
+                ],
                 'outputSpeech': {
                     'type': 'SpeechList',
                     'values': [
@@ -339,7 +348,6 @@ class SmokeTestUsingSamples(unittest.TestCase):
             },
             self._get_response(response)
         )
-
 
     def test_dice(self):
         self._launch('dice/handler.py')

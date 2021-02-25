@@ -75,6 +75,10 @@ class _Response(object):
 
         return json.dumps(response_wrapper)
 
+    def add_directive(self, directive):
+        self._response['directives'].append(directive)
+        return self
+
 
 class statement(_Response):
 
