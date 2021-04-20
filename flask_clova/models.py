@@ -74,6 +74,13 @@ class _Response(object):
         dbgdump(response_wrapper)
 
         return json.dumps(response_wrapper)
+    
+    def add_can_fulfill(self, can_fulfill: bool, score: float):
+        self._response['canFulfillIntent'] = {
+            "canFulfill": "YES" if can_fulfill else "NO",
+            "confidenceScore": str(score),
+        }
+        return self
 
     def add_directive(self, directive):
         self._response['directives'].append(directive)
