@@ -86,6 +86,15 @@ class _Response(object):
         self._response['directives'].append(directive)
         return self
 
+    def add_reprompt(self, reprompt: str):
+        self._response['reprompt'] = {
+            'outputSpeech': {
+                'type': 'SimpleSpeech',
+                'values': _output_speech(reprompt)
+            }
+        }
+        return self
+
 
 class statement(_Response):
 
